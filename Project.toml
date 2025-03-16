@@ -9,6 +9,7 @@ HypothesisTests = "09f84164-cd44-5f33-b23f-e6b0d136a0d5"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
 
 [compat]
 Distributions = "0.25.118"
@@ -16,6 +17,7 @@ HypothesisTests = "0.11.3"
 Random = "1.11.0"
 Revise = "3.7.2"
 StatsBase = "0.34.4"
+TestItemRunner = "1.1.0"
 julia = "1.6.7"
 
 [extras]

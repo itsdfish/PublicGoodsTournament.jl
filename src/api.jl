@@ -1,12 +1,34 @@
+"""
+    AbstractPlayer
+
+An abstract player type for the public goods game. Subtypes of this abstract type must have the following fields
+
+# Fields 
+
+- `id`: unique player id 
+- `trial_money::Float64`: the amount of money at the beginning of a trial
+"""
 abstract type AbstractPlayer end
 
+"""
+    AbstractPublicGoodsGame
+
+An abstract public goods game object which expects the following fields.
+
+# Fields
+
+- `total_money::Dict{T, Float64}`: the total amount of money for each player
+- `public_goods_multiplier::Float64`: the amount by which pooled contributions are multipled
+- `trial_start_amount`: the amount of money given to an player at the begining of each trial
+- `max_punishment_amount::Float64`: the maximum amount that an player can punish on any given trial
+"""
 abstract type AbstractPublicGoodsGame end
 
-function battle!(game_type, ids, types, args)
+function battle!(; game_type, ids, types, args, game_config)
     players = Dict(id => t(; id, a...) for (t, id, a) in zip(types, ids, args))
-    game = game_type(ids)
-    setup!(players, ids)
-    compete!(game, players)
+    game = game_type(; ids, game_config...)
+    setup!(players, ids, game_config)
+    battle!(game, players)
     return nothing
 end
 
@@ -15,7 +37,7 @@ function battle!(game::AbstractPublicGoodsGame, players)
         add_money!(players, game), value(players)
         contributions = contribute!(game, players)
         update_money!(game, contributions)
-        observe_outcome!(players, game.multiplier, contributions)
+        observe_contributions!(players, contributions)
         punish!(players, game)
     end
     return nothing
@@ -24,31 +46,63 @@ end
 function contribute!(game::AbstractPublicGoodsGame, players::Dict{T, A}) where {T, A}
     contributions = Dict{T, Float64}()
     for (id, player) ∈ players
-        contribution = contribute(player, game.multiplier)
-        contribution = validate_contribution(game, contribution)
+        contribution = contribute(player)
+        validate_contribution(game, player, contribution)
         contributions[id] = contribution
     end
     return conbitutions
 end
 
 function punish(game::AbstractPublicGoodsGame, players::Dict{T, A}) where {T, A}
-    punishments = Dict{T, Float64}()
     ids = keys(players)
-    for (id, player) ∈ players
-        punishment = punish(player, ids)
-        punishment = validate_punishment(game, punishment)
-        contributions[id] = contribution
+    for (_, player) ∈ players
+        punishments = punish(player, ids)
+        validate_punishment(game, player, punishments)
+        apply_punishment!(game, player, punishments)
     end
     return conbitutions
 end
 
-function validate_contribution(game::AbstractPublicGoodsGame, contribution)
-    if contribution < game.initial_trial_money
-        return 0
-    elseif contribution > game.initial_trial_money
-        return game.initial_trial_money
+function apply_punishment!(
+    game::AbstractPublicGoodsGame,
+    player::AbstractPlayer,
+    punishments::Dict{T, Float64}
+) where {T}
+    (; total_money) = game
+    for (id, punishment) ∈ punishments
+        total_money[id] -= punishment
+        total_money[player.id] -= punishment
     end
-    return contribution
+    return nothing
+end
+
+function validate_contribution(
+    game::AbstractPublicGoodsGame,
+    player::AbstractPlayer,
+    contribution
+)
+    if contribution < game.trial_start_amount
+        error("$(player.id)'s contribution is too small. Minimum contribution is 0.")
+    elseif contribution > game.trial_start_amount
+        error("$(player.id)'s contribution is too large. Maximum contribution is $(game.trial_start_amount).")
+    end
+    return nothing
+end
+
+function validate_punishments(
+    game::AbstractPublicGoodsGame,
+    player::AbstractPlayer,
+    punishments
+)
+    total_money = game.total_money[player.id]
+    vals = values(punishments)
+    total_punishment = sum(vals)
+    if total_punishment > total_money
+        throw(ErrorException("player $(player.id)'s total punishment amount of $total_punishment exceeds its total money of $total_money"))
+    elseif contribution < game.trial_start_amount
+        throw(ErrorException("player $(player.id)'s contribution is too large. Maximum contribution is $(game.trial_start_amount)."))
+    end
+    return nothing
 end
 
 function add_money!(game::AbstractPublicGoodsGame, player::AbstractPlayer)
@@ -63,14 +117,69 @@ function add_money!(game::AbstractPublicGoodsGame, players::Dict{T, A}) where {T
     return nothing
 end
 
-function contribute(player::AbstractPlayer, multiplier)
+"""
+    contribute(player::AbstractPlayer)
+
+Contribute to the public good.
+
+# Arguments
+
+- `player::AbstractPlayer`: an abstract player type 
+contribute(player::AbstractPlayer)
+# Returns
+
+- `contribution::Float64`: the amount contributed to the public good
+"""
+function contribute(player::AbstractPlayer)
 end
 
-function observe_outcome!(player::AbstractPlayer, multiplier, contributions)
+"""
+    observe_contributions!(player::AbstractPlayer, contributions::Dict{T,Float64}) 
+
+Observe each players contribution.
+
+# Arguments
+
+- `player::AbstractPlayer`: an abstract player type 
+- `contributions::Dict{T,Float64}`: each player's contribution: id => contribution
+
+# Returns
+
+nothing
+"""
+function observe_contributions!(
+    player::AbstractPlayer,
+    contributions::Dict{T, Float64}
+) where {T}
 end
 
+"""
+    punish(player::AbstractPlayer, ids)
+
+Optionally setup player before playing iterated public goods game.
+
+# Arguments
+
+- `player::AbstractPlayer`: an abstract player type 
+- `ids`: a collection of player ids 
+
+# Returns
+
+- `punishments::Dict{T, Float64}`: punishment amount associated with each player: id => punishment
+"""
 function punish(player::AbstractPlayer, ids)
 end
 
-function setup!(player::AbstractPlayer, ids)
+"""
+    setup!(player::AbstractPlayer, ids, game_config)
+
+Optionally setup player before playing iterated public goods game.
+
+# Arguments
+
+- `player::AbstractPlayer`: an abstract player type 
+- `ids`: a collection of player ids 
+- `game_config`: keyword arguments of game options
+"""
+function setup!(player::AbstractPlayer, ids, game_config)
 end

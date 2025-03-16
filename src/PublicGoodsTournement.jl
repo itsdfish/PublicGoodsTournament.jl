@@ -18,6 +18,7 @@ export punish
 export setup!
 
 # game methods 
+export PublicGoodsGame
 export battle!
 
 include("api.jl")
@@ -26,5 +27,6 @@ include("dad.jl")
 include("douche_bag.jl")
 include("mary.jl")
 include("papi.jl")
+include("standard_game.jl")
 
 end

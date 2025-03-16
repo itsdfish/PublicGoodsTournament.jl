@@ -1,6 +1,3 @@
-using PublicGoodsTournement
-using Test
+using TestItemRunner
 
-@testset "PublicGoodsTournement.jl" begin
-    # Write your tests here.
-end
+@run_package_tests
