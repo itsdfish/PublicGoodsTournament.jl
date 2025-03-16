@@ -1,17 +1,28 @@
 using PublicGoodsTournement
 using Documenter
 
-DocMeta.setdocmeta!(PublicGoodsTournement, :DocTestSetup, :(using PublicGoodsTournement); recursive=true)
-
-makedocs(;
-    modules=[PublicGoodsTournement],
-    authors="itsdfish <itsdfish@gmail.com> and contributors",
-    sitename="PublicGoodsTournement.jl",
-    format=Documenter.HTML(;
-        edit_link="main",
-        assets=String[],
+makedocs(
+    warnonly = true,
+    sitename = "PublicGoodsTournement",
+    format = Documenter.HTML(
+        assets = [
+            asset(
+            "https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro&display=swap",
+            class = :css
+        )
+        ],
+        collapselevel = 1
     ),
-    pages=[
-        "Home" => "index.md",
+    modules = [
+        GoFish
+    # Base.get_extension(PublicGoodsTournement, :TuringExt),
+    # Base.get_extension(PublicGoodsTournement, :NamedArraysExt)
     ],
+    pages = [
+        "Home" => "index.md",
+        "Example" => "example.md",
+        "API" => "api.md"
+    ]
 )
+
+deploydocs(repo = "github.com/itsdfish/PublicGoodsTournement.jl.git")
