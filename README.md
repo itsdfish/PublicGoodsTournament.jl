@@ -22,6 +22,10 @@ This will install a development copy in `.julia/dev` where you can create your a
 
 The folder `src` contains a template associated with your name where you can write your code. A simple example can be found in `src/douche_bag.jl`.
 
+# Documentation
+
+The documentation can be found [here](https://itsdfish.github.io/PublicGoodsTournament.jl/dev/api/).
+
 # Submitting your Agent
 
 As you work on your agent, you can commit changes to your fork optionally from the Julia REPL. Simply type `]` to switch to the terminal mode and use git commands as usual. Once you are ready to submit your agent, submit a pull request to the originating repo. 

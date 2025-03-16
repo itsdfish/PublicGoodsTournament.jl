@@ -98,9 +98,9 @@ function validate_punishments(
     vals = values(punishments)
     total_punishment = sum(vals)
     if total_punishment > total_money
-        throw(ErrorException("player $(player.id)'s total punishment amount of $total_punishment exceeds its total money of $total_money"))
-    elseif contribution < game.trial_start_amount
-        throw(ErrorException("player $(player.id)'s contribution is too large. Maximum contribution is $(game.trial_start_amount)."))
+        error("$(player.id)'s total punishment amount of $total_punishment exceeds its total money of $total_money")
+    elseif any(x -> x < 0, vals)
+        error("$(player.id)'s punishments contain a negative value.")
     end
     return nothing
 end
@@ -118,9 +118,9 @@ function add_money!(game::AbstractPublicGoodsGame, players::Dict{T, A}) where {T
 end
 
 """
-    contribute(player::AbstractPlayer)
+    update_money!(game::AbstractPublicGoodsGame, contributions)
 
-Contribute to the public good.
+Update each agents money based on contribution and total public good.
 
 # Arguments
 
@@ -130,13 +130,38 @@ contribute(player::AbstractPlayer)
 
 - `contribution::Float64`: the amount contributed to the public good
 """
+function update_money!(game::AbstractPublicGoodsGame, contributions)
+    (; total_money, trial_start_amount, public_goods_multiplier) = game
+    public_good = sum(values(contributions)) * public_goods_multiplier / length(total_money)
+    for (id, contribution) ∈ contributions
+        game.total_money[id] += (trial_start_amount - contribution + public_good)
+    end
+    return nothing
+end
+
+"""
+    contribute(player::AbstractPlayer)
+
+Contribute to the public good.
+
+# Arguments
+
+- `player::AbstractPlayer`: an abstract player type 
+
+# Returns
+
+- `contribution::Float64`: the amount contributed to the public good
+"""
 function contribute(player::AbstractPlayer)
 end
 
 """
-    observe_contributions!(player::AbstractPlayer, contributions::Dict{T,Float64}) 
+    observe_contributions!(
+        player::AbstractPlayer,
+        contributions::Dict{T, Float64}
+    ) 
 
-Observe each players contribution.
+Optionally observe each players contribution.
 
 # Arguments
 
@@ -145,11 +170,36 @@ Observe each players contribution.
 
 # Returns
 
-nothing
+- nothing
 """
 function observe_contributions!(
     player::AbstractPlayer,
     contributions::Dict{T, Float64}
+) where {T}
+end
+
+"""
+observe_punishments!(
+    player::AbstractPlayer,
+    punisher_id::T,
+    punishment::Dict{T, Float64}
+) 
+
+Optionally observe the punishments from the punisher.
+
+# Arguments
+
+- `player::AbstractPlayer`: an abstract player type 
+- `contributions::Dict{T,Float64}`: each player's contribution: id => contribution
+
+# Returns
+
+- nothing
+"""
+function observe_punishments!(
+    player::AbstractPlayer,
+    punisher_id::T,
+    punishment::Dict{T, Float64}
 ) where {T}
 end
 

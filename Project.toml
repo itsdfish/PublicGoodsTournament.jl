@@ -1,6 +1,6 @@
 name = "PublicGoodsTournement"
 uuid = "0f0a6ae1-6fda-43cd-a599-6a93ebc0c6a6"
-authors = ["itsdfish <itsdfish@gmail.com> and contributors"]
+authors = ["itsdfish"]
 version = "1.0.0-DEV"
 
 [deps]
