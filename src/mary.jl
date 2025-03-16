@@ -1,26 +1,28 @@
 mutable struct Mary <: AbstractPlayer
     id::Symbol
-    trial_money::Float64
+    trial_start_money::Float64
 end
 
 """
-    contribute(player::Mary)
+    contribute(game_type::Type{<:AbstractPublicGoodsGame}, player::Mary)
 
 Contribute to the public good.
 
 # Arguments
 
+- `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
 - `player::Mary`: an abstract player type 
 
 # Returns
 
 - `contribution::Float64`: the amount contributed to the public good
 """
-function contribute(player::Mary)
+function contribute(game_type::Type{<:AbstractPublicGoodsGame}, player::Mary)
 end
 
 """
     observe_contributions!(
+        game_type::Type{<:AbstractPublicGoodsGame},
         player::Mary,
         contributions::Dict{T, Float64}
     ) 
@@ -29,6 +31,7 @@ Optionally observe each players contribution.
 
 # Arguments
 
+- `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
 - `player::Mary`: an abstract player type 
 - `contributions::Dict{T,Float64}`: each player's contribution: id => contribution
 
@@ -37,22 +40,25 @@ Optionally observe each players contribution.
 - nothing
 """
 function observe_contributions!(
+    game_type::Type{<:AbstractPublicGoodsGame},
     player::Mary,
     contributions::Dict{T, Float64}
 ) where {T}
 end
 
 """
-observe_punishments!(
-    player::Mary,
-    punisher_id::T,
-    punishment::Dict{T, Float64}
-) 
+    observe_punishments!(
+        game_type::Type{<:AbstractPublicGoodsGame},
+        player::Mary,
+        punisher_id::T,
+        punishment::Dict{T, Float64}
+    ) 
 
 Optionally observe the punishments from the punisher.
 
 # Arguments
 
+- `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
 - `player::Mary`: an abstract player type 
 - `contributions::Dict{T,Float64}`: each player's contribution: id => contribution
 
@@ -61,6 +67,7 @@ Optionally observe the punishments from the punisher.
 - nothing
 """
 function observe_punishments!(
+    game_type::Type{<:AbstractPublicGoodsGame},
     player::Mary,
     punisher_id::T,
     punishment::Dict{T, Float64}
@@ -68,12 +75,13 @@ function observe_punishments!(
 end
 
 """
-    punish(player::Mary, ids)
+    punish(game_type::Type{<:AbstractPublicGoodsGame}, player::Mary, ids)
 
 Optionally setup player before playing iterated public goods game.
 
 # Arguments
 
+- `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
 - `player::Mary`: an abstract player type 
 - `ids`: a collection of player ids 
 
@@ -81,19 +89,30 @@ Optionally setup player before playing iterated public goods game.
 
 - `punishments::Dict{T, Float64}`: punishment amount associated with each player: id => punishment
 """
-function punish(player::Mary, ids)
+function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::Mary, ids)
 end
 
 """
-    setup!(player::Mary, ids, game_config)
+    setup!(
+        game_type::Type{<:AbstractPublicGoodsGame},
+        player::Mary,
+        ids,
+        game_config
+    )
 
 Optionally setup player before playing iterated public goods game.
 
 # Arguments
 
+- `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
 - `player::Mary`: an abstract player type 
 - `ids`: a collection of player ids 
 - `game_config`: keyword arguments of game options
 """
-function setup!(player::Mary, ids, game_config)
+function setup!(
+    game_type::Type{<:AbstractPublicGoodsGame},
+    player::Mary,
+    ids,
+    game_config
+)
 end

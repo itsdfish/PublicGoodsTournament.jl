@@ -7,7 +7,7 @@
     ids = (:sloth, :chunk, :danzig)
     game_config = (
         public_goods_multiplier = 2,
-        trial_start_amount = 10.0,
+        trial_start_money = 10.0,
         max_punishment_amount = 10.0
     )
     game = PublicGoodsGame(; ids, game_config...)

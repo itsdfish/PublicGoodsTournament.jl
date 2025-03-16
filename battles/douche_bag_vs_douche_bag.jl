@@ -19,7 +19,7 @@ args = ((; ids), (; ids))
 # game configuration 
 game_config = (
     public_goods_multiplier = 2,
-    trial_start_amount = 10,
+    trial_start_money = 10,
     max_punishment_amount = 10
 )
 # number of games
