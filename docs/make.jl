@@ -14,7 +14,7 @@ makedocs(
         collapselevel = 1
     ),
     modules = [
-        GoFish
+        PublicGoodsTournement
     # Base.get_extension(PublicGoodsTournement, :TuringExt),
     # Base.get_extension(PublicGoodsTournement, :NamedArraysExt)
     ],
