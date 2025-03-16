@@ -25,4 +25,4 @@ makedocs(
     ]
 )
 
-deploydocs(repo = "github.com/itsdfish/PublicGoodsTournement.jl.git")
+deploydocs(repo = "https://github.com/itsdfish/PublicGoodsTournament.jl.git")

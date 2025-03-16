@@ -13,7 +13,7 @@ Order   = [:function]
 Private = false
 ```
 
-# Public Functions 
+# Private Functions 
  
 ```@autodocs
 Modules = [PublicGoodsTournement]
