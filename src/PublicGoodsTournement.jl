@@ -6,6 +6,7 @@ export AbstractPublicGoodsGame
 
 # player types
 export Chris
+export Cuck
 export Dad
 export DoucheBag
 export Mary
@@ -14,8 +15,8 @@ export Papi
 # player methods 
 export contribute
 export observe_outcome!
+export observe_punishments!
 export punish
-export setup!
 
 # game methods 
 export PublicGoodsGame
@@ -23,6 +24,7 @@ export battle!
 
 include("api.jl")
 include("chris.jl")
+include("cuck.jl")
 include("dad.jl")
 include("douche_bag.jl")
 include("mary.jl")

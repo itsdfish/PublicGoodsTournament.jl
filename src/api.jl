@@ -25,9 +25,8 @@ An abstract public goods game object which expects the following fields.
 abstract type AbstractPublicGoodsGame end
 
 function battle!(; n_trials, game_type, ids, types, args, game_config)
-    players = Dict(id => t(; id, a...) for (t, id, a) in zip(types, ids, args))
+    players = Dict(id => t(; id, game_config, a...) for (t, id, a) in zip(types, ids, args))
     game = game_type(; ids, game_config...)
-    map(p -> setup!(game_type, p, ids, game_config), values(players))
     battle!(game, players, n_trials)
     return game
 end
@@ -36,7 +35,7 @@ function battle!(game::G, players, n_trials) where {G <: AbstractPublicGoodsGame
     for _ ∈ 1:n_trials
         add_money!(game, players)
         contributions = contribute!(game, players)
-        update_money!(game, contributions)
+        update_money!(game, players, contributions)
         observe_contributions!(game, players, contributions)
         punish(game, players)
     end
@@ -111,6 +110,9 @@ function validate_punishments(
     total_money = game.total_money[player.id]
     vals = values(punishments)
     total_punishment = sum(vals)
+    if total_punishment == 0
+        return nothing
+    end
     if total_punishment > total_money
         error("$(player.id)'s total punishment amount of $total_punishment exceeds its total money of $total_money")
     elseif any(x -> x < 0, vals)
@@ -132,23 +134,26 @@ function add_money!(game::AbstractPublicGoodsGame, players::Dict)
 end
 
 """
-    update_money!(game::AbstractPublicGoodsGame, contributions)
+    update_money!(game::AbstractPublicGoodsGame, players::Dict, contributions::Dict)
 
-Update each agents money based on contribution and total public good.
+Update total money for game and each agent.
 
 # Arguments
 
-- `player::AbstractPlayer`: an abstract player type 
+- `Game:::AbstractPublicGoodsGame`: public goods game type 
+- `players::Dict`: mapping of id to player objects: id => player
+- `contributions::Dict`: mapping of id to contributions: id => contribution
 
 # Returns
 
-- `contribution::Float64`: the amount contributed to the public good
+- nothing
 """
-function update_money!(game::AbstractPublicGoodsGame, contributions)
+function update_money!(game::AbstractPublicGoodsGame, players::Dict, contributions::Dict)
     (; total_money, trial_start_money, public_goods_multiplier) = game
     public_good = sum(values(contributions)) * public_goods_multiplier / length(total_money)
     for (id, contribution) ∈ contributions
         game.total_money[id] += (trial_start_money - contribution + public_good)
+        players[id].total_money = game.total_money[id]
     end
     return nothing
 end
@@ -240,29 +245,4 @@ Optionally setup player before playing iterated public goods game.
 - `punishments::Dict{T, Float64}`: punishment amount associated with each player: id => punishment
 """
 function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::AbstractPlayer, ids)
-end
-
-"""
-    setup!(
-        game_type::Type{<:AbstractPublicGoodsGame},
-        player::AbstractPlayer,
-        ids,
-        game_config
-    )
-
-Optionally setup player before playing iterated public goods game.
-
-# Arguments
-
-- `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
-- `player::AbstractPlayer`: an abstract player type 
-- `ids`: a collection of player ids 
-- `game_config`: keyword arguments of game options
-"""
-function setup!(
-    game_type::Type{<:AbstractPublicGoodsGame},
-    player::AbstractPlayer,
-    ids,
-    game_config
-)
 end

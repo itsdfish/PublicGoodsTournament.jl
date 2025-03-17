@@ -1,6 +1,23 @@
+"""
+    Mary <: AbstractPlayer
+
+A player type for the iterated public goods game. The API requireds the following 
+fields, but more can be added to support your player's strategy.
+
+# Fields
+
+- `id::Symbol`: a unique name for the player 
+- `trial_start_money`: the money provided at the begining of each trial 
+- `total_money`: the cumulative money earned across completed trials 
+"""
 mutable struct Mary <: AbstractPlayer
     id::Symbol
     trial_start_money::Float64
+    total_money::Float64
+end
+
+function Mary(; id, ids, game_config)
+    return Mary(id, 0.0, 0.0)
 end
 
 """
@@ -90,29 +107,4 @@ Optionally setup player before playing iterated public goods game.
 - `punishments::Dict{T, Float64}`: punishment amount associated with each player: id => punishment
 """
 function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::Mary, ids)
-end
-
-"""
-    setup!(
-        game_type::Type{<:AbstractPublicGoodsGame},
-        player::Mary,
-        ids,
-        game_config
-    )
-
-Optionally setup player before playing iterated public goods game.
-
-# Arguments
-
-- `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
-- `player::Mary`: an abstract player type 
-- `ids`: a collection of player ids 
-- `game_config`: keyword arguments of game options
-"""
-function setup!(
-    game_type::Type{<:AbstractPublicGoodsGame},
-    player::Mary,
-    ids,
-    game_config
-)
 end

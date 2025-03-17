@@ -2,15 +2,15 @@ import PublicGoodsTournement: contribute
 import PublicGoodsTournement: observe_contributions!
 import PublicGoodsTournement: observe_punishments!
 import PublicGoodsTournement: punish
-import PublicGoodsTournement: setup!
 
 mutable struct Player <: AbstractPlayer
     id::Symbol
     trial_start_money::Float64
+    total_money::Float64
 end
 
-function Player(; id, ids)
-    return Player(id, 0.0)
+function Player(; id, ids, game_config)
+    return Player(id, 0.0, 0.0)
 end
 
 """
@@ -104,27 +104,3 @@ function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::Player, ids)
     return Dict(id => 0.0 for id ∈ ids)
 end
 
-"""
-    setup!(
-        game_type::Type{<:AbstractPublicGoodsGame},
-        player::Player,
-        ids,
-        game_config
-    )
-
-Optionally setup player before playing iterated public goods game.
-
-# Arguments
-
-- `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
-- `player::Player`: an abstract player type 
-- `ids`: a collection of player ids 
-- `game_config`: keyword arguments of game options
-"""
-function setup!(
-    game_type::Type{<:AbstractPublicGoodsGame},
-    player::Player,
-    ids,
-    game_config
-)
-end

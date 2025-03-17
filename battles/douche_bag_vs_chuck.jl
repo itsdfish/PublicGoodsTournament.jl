@@ -12,23 +12,20 @@ using Random
 #                                         set up games
 ############################################################################################################
 Random.seed!(451)
-ids = (:dbag1, :dbag2)
-types = (DoucheBag, DoucheBag)
+ids = (:dbag, :cuck)
+types = (DoucheBag, Cuck)
 # optional keyword argumens for each player 
 args = ((; ids), (; ids))
 # game configuration 
 game_config = (
     public_goods_multiplier = 2,
     trial_start_money = 10,
-    max_punishment_amount = 10
+    max_punishment_amount = Inf
 )
-# number of games
-n_games = 1000
+# number of trials
+n_trials = 100
 ############################################################################################################
 #                                         battle!
 ############################################################################################################
-battle!(; n_games, game_type = PublicGoodsGame, ids, types, args, game_config)
-# chi-square goodness of fit test assuming no difference in player performance
-@show test = ChisqTest(score)
-@show pvalue(test)
-game.money
+game = battle!(; n_trials, game_type = PublicGoodsGame, ids, types, args, game_config)
+game.total_money
