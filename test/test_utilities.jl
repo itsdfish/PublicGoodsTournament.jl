@@ -103,4 +103,3 @@ Optionally setup player before playing iterated public goods game.
 function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::Player, ids)
     return Dict(id => 0.0 for id ∈ ids)
 end
-

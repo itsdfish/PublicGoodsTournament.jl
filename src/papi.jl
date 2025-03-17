@@ -108,4 +108,3 @@ Optionally setup player before playing iterated public goods game.
 """
 function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::Papi, ids)
 end
-
