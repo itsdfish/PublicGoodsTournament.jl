@@ -15,7 +15,7 @@ mutable struct DoucheBag{T} <: AbstractPlayer
     id::Symbol
     ids::T
     trial_start_money::Float64
-    total_money::Float64    
+    total_money::Float64
 end
 
 """

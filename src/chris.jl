@@ -76,7 +76,7 @@ function observe_contributions!(
     player::Chris,
     contributions::Dict
 )
-return nothing
+    return nothing
 end
 
 """
