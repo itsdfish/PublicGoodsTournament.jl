@@ -7,17 +7,32 @@ and does not punish.
 # Fields
 
 - `id::Symbol`: a unique name for the player 
+- `ids::T`: a list of all player ids excluding player id
 - `trial_start_money`: the money provided at the begining of each trial 
 - `total_money`: the cumulative money earned across completed trials 
 """
-mutable struct Cuck <: AbstractPlayer
+mutable struct Cuck{T} <: AbstractPlayer
     id::Symbol
+    ids::T
     trial_start_money::Float64
     total_money::Float64
 end
 
+"""
+    Cuck(; id, ids, game_config)
+
+A constructor for the Cuck player type. Additional keyword arguments can be added and passed via 
+`args` in the function `battle!`.
+
+# Keywords 
+
+- `id`: the Cuck player id 
+- `ids`: a list of all player ids excluding player id
+- `game_config`: a set of keywords corresponding to parameters of the iterated public goods game
+"""
 function Cuck(; id, ids, game_config)
-    return Cuck(id, 0.0, 0.0)
+    ids = setdiff(ids, [id])
+    return Cuck(id, ids, 0.0, 0.0)
 end
 
 """
@@ -42,7 +57,7 @@ end
     observe_contributions!(
         game_type::Type{<:AbstractPublicGoodsGame},
         player::Cuck,
-        contributions::Dict{T, Float64}
+        contributions::Dict
     ) 
 
 Optionally observe each players contribution.
@@ -51,7 +66,7 @@ Optionally observe each players contribution.
 
 - `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
 - `player::Cuck`: an abstract player type 
-- `contributions::Dict{T,Float64}`: each player's contribution: id => contribution
+- `contributions::Dict`: each player's contribution: id => contribution
 
 # Returns
 
@@ -60,8 +75,9 @@ Optionally observe each players contribution.
 function observe_contributions!(
     game_type::Type{<:AbstractPublicGoodsGame},
     player::Cuck,
-    contributions::Dict{T, Float64}
-) where {T}
+    contributions::Dict
+)
+    return nothing
 end
 
 """
@@ -69,7 +85,7 @@ end
         game_type::Type{<:AbstractPublicGoodsGame},
         player::Cuck,
         punisher_id::T,
-        punishment::Dict{T, Float64}
+        punishment::Dict{T, N}
     ) 
 
 Optionally observe the punishments from the punisher.
@@ -78,7 +94,7 @@ Optionally observe the punishments from the punisher.
 
 - `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
 - `player::Cuck`: an abstract player type 
-- `contributions::Dict{T,Float64}`: each player's contribution: id => contribution
+- `contributions::Dict{T,N}`: each player's contribution: id => contribution
 
 # Returns
 
@@ -88,8 +104,9 @@ function observe_punishments!(
     game_type::Type{<:AbstractPublicGoodsGame},
     player::Cuck,
     punisher_id::T,
-    punishment::Dict{T, Float64}
-) where {T}
+    punishment::Dict{T, N}
+) where {T, N}
+    return nothing
 end
 
 """
@@ -101,13 +118,11 @@ Optionally setup player before playing iterated public goods game.
 
 - `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
 - `player::Cuck`: an abstract player type 
-- `ids`: a collection of player ids 
 
 # Returns
 
 - `punishments::Dict{T, Float64}`: punishment amount associated with each player: id => punishment
 """
-function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::Cuck, ids)
-    other_ids = setdiff(ids, [player.id])
-    return Dict(id => 0.0 for id ∈ other_ids)
+function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::Cuck)
+    return Dict(id => 0.0 for id ∈ player.ids)
 end

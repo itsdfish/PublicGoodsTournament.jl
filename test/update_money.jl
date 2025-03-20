@@ -16,9 +16,9 @@
     game.total_money[:danzig] = 5
 
     players = Dict(
-        :sloth => Player(:sloth, 10, 0),
-        :chunk => Player(:chunk, 15, 0),
-        :danzig => Player(:danzig, 5, 0)
+        :sloth => Player(:sloth, ids, 10.0, 0.0),
+        :chunk => Player(:chunk, ids, 15.0, 0.0),
+        :danzig => Player(:danzig, ids, 5.0, 0.0)
     )
 
     contributions = Dict(

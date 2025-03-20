@@ -23,6 +23,7 @@ export PublicGoodsGame
 export battle!
 
 include("api.jl")
+include("game.jl")
 include("chris.jl")
 include("cuck.jl")
 include("dad.jl")

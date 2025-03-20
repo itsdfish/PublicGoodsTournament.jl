@@ -6,7 +6,6 @@ using Pkg
 Pkg.activate("..")
 using Revise
 using PublicGoodsTournement
-using HypothesisTests
 using Random
 ############################################################################################################
 #                                         set up games
@@ -24,8 +23,10 @@ game_config = (
 )
 # number of trials
 n_trials = 100
+# select the game type 
+game_type = PublicGoodsGame
 ############################################################################################################
 #                                         battle!
 ############################################################################################################
-game = battle!(; n_trials, game_type = PublicGoodsGame, ids, types, args, game_config)
+game = battle!(; n_trials, game_type, ids, types, args, game_config)
 game.total_money

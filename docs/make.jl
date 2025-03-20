@@ -20,6 +20,7 @@ makedocs(
     ],
     pages = [
         "Home" => "index.md",
+        "Public Goods Games" => "public_goods_game.md",
         "Example" => "example.md",
         "API" => "api.md"
     ]

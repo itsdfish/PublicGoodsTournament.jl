@@ -3,14 +3,16 @@ import PublicGoodsTournement: observe_contributions!
 import PublicGoodsTournement: observe_punishments!
 import PublicGoodsTournement: punish
 
-mutable struct Player <: AbstractPlayer
+mutable struct Player{T} <: AbstractPlayer
     id::Symbol
+    ids::T
     trial_start_money::Float64
     total_money::Float64
 end
 
 function Player(; id, ids, game_config)
-    return Player(id, 0.0, 0.0)
+    ids = setdiff(ids, [id])
+    return Player(id, ids, 0.0, 0.0)
 end
 
 """
@@ -35,7 +37,7 @@ end
     observe_contributions!(
         game_type::Type{<:AbstractPublicGoodsGame},
         player::Player,
-        contributions::Dict{T, Float64}
+        contributions::Dict{T, N}
     ) 
 
 Optionally observe each players contribution.
@@ -44,7 +46,7 @@ Optionally observe each players contribution.
 
 - `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
 - `player::Player`: an abstract player type 
-- `contributions::Dict{T,Float64}`: each player's contribution: id => contribution
+- `contributions::Dict`: each player's contribution: id => contribution
 
 # Returns
 
@@ -53,8 +55,8 @@ Optionally observe each players contribution.
 function observe_contributions!(
     game_type::Type{<:AbstractPublicGoodsGame},
     player::Player,
-    contributions::Dict{T, Float64}
-) where {T}
+    contributions::Dict
+)
 end
 
 """
@@ -62,7 +64,7 @@ end
         game_type::Type{<:AbstractPublicGoodsGame},
         player::Player,
         punisher_id::T,
-        punishment::Dict{T, Float64}
+        punishment::Dict{T, N}
     ) 
 
 Optionally observe the punishments from the punisher.
@@ -71,7 +73,7 @@ Optionally observe the punishments from the punisher.
 
 - `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
 - `player::Player`: an abstract player type 
-- `contributions::Dict{T,Float64}`: each player's contribution: id => contribution
+- `contributions::Dict{T,N}`: each player's contribution: id => contribution
 
 # Returns
 
@@ -81,8 +83,8 @@ function observe_punishments!(
     game_type::Type{<:AbstractPublicGoodsGame},
     player::Player,
     punisher_id::T,
-    punishment::Dict{T, Float64}
-) where {T}
+    punishment::Dict{T, N}
+) where {T, N}
 end
 
 """
@@ -94,12 +96,11 @@ Optionally setup player before playing iterated public goods game.
 
 - `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
 - `player::Player`: an abstract player type 
-- `ids`: a collection of player ids 
 
 # Returns
 
 - `punishments::Dict{T, Float64}`: punishment amount associated with each player: id => punishment
 """
-function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::Player, ids)
+function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::Player)
     return Dict(id => 0.0 for id ∈ ids)
 end
