@@ -1,6 +1,6 @@
 # Example 
 
-This example demonstrates how to create a Cuck player type. The cuck contributes its entire trial endowment to the public good regardless of the contributions of the players. The cuck never punishes other players for not contributing. 
+This example demonstrates how to create a Cuck player type. The cuck contributes its entire trial endowment to the public good regardless of the contributions of the players. The cuck never punishes other players for not contributing. A full runable example can be found [here](https://github.com/itsdfish/PublicGoodsTournament.jl/blob/main/battles/douche_bag_vs_chuck.jl).
 
 ## Custom Player Type
 
@@ -18,7 +18,7 @@ end
 
 ### Constructor 
 
-Each player type is associated with a contructor for creating instances of a player. The contructor below for the `Cuck` consists of the minimum required keyword arguments: the id of the Cuck, the ids of other players, and a `NamedTuple` of game configuration parameters. Additional keyword arguments created in the battle script (e.g., ) and passed to the constructor.
+Each player type is associated with a contructor for creating instances of a player. The contructor below for the `Cuck` consists of the minimum required keyword arguments: the id of the Cuck, the ids of other players, and a `NamedTuple` of game configuration parameters. Additional keyword arguments created in the battle script (e.g., specified [here](https://github.com/itsdfish/PublicGoodsTournament.jl/blob/c896a1602d7ee2633679d8aea58ad60ceb48991a/battles/douche_bag_vs_chuck.jl#L17C1-L18C1)) and passed to the constructor.
 
 ```julia
 function Cuck(; id, ids, game_config)
