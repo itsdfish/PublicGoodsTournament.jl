@@ -9,6 +9,7 @@ Performs a battle of `n_trials` of the iterated the public goods game between pl
 3. The public good is updated based on contributions and divided among players 
 4. The players observe the contributions of others. 
 5. The players can punish the others and view the punishments of other players
+6. The players can observe the total money for all players
 
 # Keywords 
 
@@ -37,6 +38,7 @@ function battle!(game::G, players, n_trials) where {G <: AbstractPublicGoodsGame
         update_money!(game, players, contributions)
         observe_contributions!(game, players, contributions)
         punish(game, players)
+        observe_total_money!(game, players)
     end
     return nothing
 end
@@ -119,6 +121,13 @@ function validate_punishments(
         error("$(player.id)'s total punishment amount of $total_punishment exceeds $reason of $max_punishment")
     elseif any(x -> x < 0, vals)
         error("$(player.id)'s punishments contain a negative value.")
+    end
+    return nothing
+end
+
+function observe_total_money!(game::G, players::Dict) where {G <: AbstractPublicGoodsGame}
+    for (_,player) ∈ players 
+        observe_total_money!(G, player, deepcopy(game.total_money))
     end
     return nothing
 end

@@ -16,6 +16,7 @@ export Papi
 export contribute
 export observe_outcome!
 export observe_punishments!
+export observe_total_money!
 export punish
 
 # game methods 

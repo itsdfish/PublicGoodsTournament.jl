@@ -83,3 +83,17 @@ function observe_punishments!(
     return nothing
 end
 ```
+
+### Observe Total Money
+
+Lastly, players have the option to use the total money for all agents. Some decision strategies may use this information, but simple players like the `Cuck` do not use this information. The input `total_money` is a dictionary that maps player id to total money: id => total money
+
+```julia
+function observe_total_money!(
+    game_type::Type{<:AbstractPublicGoodsGame},
+    player::Cuck,
+    total_money::Dict
+)
+    return nothing
+end
+```

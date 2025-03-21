@@ -69,6 +69,23 @@ function observe_contributions!(
 end
 
 """
+    punish(game_type::Type{<:AbstractPublicGoodsGame}, player::AbstractPlayer)
+
+Optionally setup player before playing iterated public goods game.
+
+# Arguments
+
+- `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
+- `player::AbstractPlayer`: an abstract player type 
+
+# Returns
+
+- `punishments::Dict{T, Float64}`: punishment amount associated with each player: id => punishment
+"""
+function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::AbstractPlayer)
+end
+
+"""
     observe_punishments!(
         game_type::Type{<:AbstractPublicGoodsGame},
         player::AbstractPlayer,
@@ -98,18 +115,28 @@ function observe_punishments!(
 end
 
 """
-    punish(game_type::Type{<:AbstractPublicGoodsGame}, player::AbstractPlayer)
+    observe_total_money!(
+        game_type::Type{<:AbstractPublicGoodsGame},
+        player::AbstractPlayer,
+        total_money::Dict
+    )
 
-Optionally setup player before playing iterated public goods game.
+Optionally observe the total money of all players.
 
 # Arguments
 
 - `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
 - `player::AbstractPlayer`: an abstract player type 
+- `contributions::Dict`: each player's contribution: id => contribution
 
 # Returns
 
-- `punishments::Dict{T, Float64}`: punishment amount associated with each player: id => punishment
+- nothing
 """
-function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::AbstractPlayer)
+function observe_total_money!(
+    game_type::Type{<:AbstractPublicGoodsGame},
+    player::AbstractPlayer,
+    total_money::Dict
+)
+    return nothing
 end

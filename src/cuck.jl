@@ -126,3 +126,30 @@ Optionally setup player before playing iterated public goods game.
 function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::Cuck)
     return Dict(id => 0.0 for id ∈ player.ids)
 end
+
+"""
+    observe_total_money!(
+        game_type::Type{<:AbstractPublicGoodsGame},
+        player::Cuck,
+        total_money::Dict
+    )
+
+Optionally observe the total money of all players.
+
+# Arguments
+
+- `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
+- `player::Cuck`: an abstract player type 
+- `contributions::Dict`: each player's contribution: id => contribution
+
+# Returns
+
+- nothing
+"""
+function observe_total_money!(
+    game_type::Type{<:AbstractPublicGoodsGame},
+    player::Cuck,
+    total_money::Dict
+)
+    return nothing
+end

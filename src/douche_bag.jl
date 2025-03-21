@@ -126,3 +126,30 @@ function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::DoucheBag)
     punishment_amount = player.total_money / (n_players * 3)
     return Dict(id => punishment_amount for id ∈ player.ids)
 end
+
+"""
+    observe_total_money!(
+        game_type::Type{<:AbstractPublicGoodsGame},
+        player::DoucheBag,
+        total_money::Dict
+    )
+
+Optionally observe the total money of all players.
+
+# Arguments
+
+- `game_type::Type{<:AbstractPublicGoodsGame}`: public goods game type 
+- `player::DoucheBag`: an abstract player type 
+- `contributions::Dict`: each player's contribution: id => contribution
+
+# Returns
+
+- nothing
+"""
+function observe_total_money!(
+    game_type::Type{<:AbstractPublicGoodsGame},
+    player::DoucheBag,
+    total_money::Dict
+)
+    return nothing
+end

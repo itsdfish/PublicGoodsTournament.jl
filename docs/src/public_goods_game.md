@@ -21,7 +21,7 @@ The slope is negative so long $g < n$, which means each dollar contributed resul
 ```@example rules
 using Plots 
 f(m, c, g, n) = m - c + g * c / n
-f(m, c, g, n) = m + c * ((g - n ) / n)
+f(m, c, g, n) = m + c * ((g - n) / n)
 n = 10
 m = 10
 g = 2
