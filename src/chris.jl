@@ -16,6 +16,8 @@ mutable struct Chris{T} <: AbstractPlayer
     ids::T
     trial_start_money::Float64
     total_money::Float64
+    players_money::Dict{Symbol, Float64}
+    contributions::Dict{Symbol, Float64}
 end
 
 """
@@ -31,8 +33,10 @@ A constructor for the Chris player type. Additional keyword arguments can be add
 - `game_config`: a set of keywords corresponding to parameters of the iterated public goods game
 """
 function Chris(; id, ids, game_config)
-    ids = setdiff(ids, [id])
-    return Chris(id, ids, 0.0, 0.0)
+    _ids = setdiff(ids, [id])
+    players_money = Dict(id => 0.0 for id ∈ ids)
+    contributions = Dict(id => 0.0 for id ∈ ids)
+    return Chris(id, _ids, 0.0, 0.0, players_money, contributions)
 end
 
 """
@@ -50,6 +54,12 @@ Contribute to the public good.
 - `contribution::Float64`: the amount contributed to the public good
 """
 function contribute(game_type::Type{<:AbstractPublicGoodsGame}, player::Chris)
+    _, best_id = findmax(player.players_money)
+    if best_id == player.id
+        return player.trial_start_money
+    else
+        return player.contributions[best_id]
+    end
 end
 
 """
@@ -76,6 +86,7 @@ function observe_contributions!(
     player::Chris,
     contributions::Dict
 )
+    player.contributions = contributions
     return nothing
 end
 
@@ -123,6 +134,7 @@ Optionally setup player before playing iterated public goods game.
 - `punishments::Dict{T, Float64}`: punishment amount associated with each player: id => punishment
 """
 function punish(game_type::Type{<:AbstractPublicGoodsGame}, player::Chris)
+    return Dict(id => 0.0 for id ∈ player.ids)
 end
 
 """
@@ -149,5 +161,6 @@ function observe_total_money!(
     player::Chris,
     total_money::Dict
 )
+    player.players_money = total_money
     return nothing
 end

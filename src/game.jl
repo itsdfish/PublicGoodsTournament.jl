@@ -37,7 +37,8 @@ function battle!(game::G, players, n_trials) where {G <: AbstractPublicGoodsGame
         contributions = contribute!(game, players)
         update_money!(game, players, contributions)
         observe_contributions!(game, players, contributions)
-        punish(game, players)
+        punishments = punish(game, players)
+        observe_punishments!(game, players, punishments)
         observe_total_money!(game, players)
     end
     return nothing
@@ -67,24 +68,25 @@ function observe_contributions!(
 end
 
 function punish(game::G, players::Dict) where {G <: AbstractPublicGoodsGame}
-    for (_, player) ∈ players
-        punishments = punish(G, player)
-        validate_punishments(game, player, punishments)
-        apply_punishments!(game, player, punishments)
-        map(p -> observe_punishments!(G, p, player.id, punishments), values(players))
-    end
-    return nothing
+    all_punishments = map(p -> begin
+            punishments = punish(G, p)
+            validate_punishments(game, p, punishments)
+            return (p.id, punishments)
+        end,
+        values(players))
+    map(p -> apply_punishments!(game, p[1], p[2]), all_punishments)
+    return all_punishments
 end
 
 function apply_punishments!(
     game::AbstractPublicGoodsGame,
-    player::AbstractPlayer,
+    player_id,
     punishments::Dict
 )
     (; total_money) = game
     for (id, punishment) ∈ punishments
         total_money[id] -= punishment
-        total_money[player.id] -= punishment
+        total_money[player_id] -= punishment
     end
     return nothing
 end
@@ -125,8 +127,19 @@ function validate_punishments(
     return nothing
 end
 
+function observe_punishments!(
+    game::G,
+    players::Dict,
+    punishments
+) where {G <: AbstractPublicGoodsGame}
+    for (_, player) ∈ players
+        map(p -> observe_punishments!(G, player, p[1], p[2]), punishments)
+    end
+    return nothing
+end
+
 function observe_total_money!(game::G, players::Dict) where {G <: AbstractPublicGoodsGame}
-    for (_,player) ∈ players 
+    for (_, player) ∈ players
         observe_total_money!(G, player, deepcopy(game.total_money))
     end
     return nothing
