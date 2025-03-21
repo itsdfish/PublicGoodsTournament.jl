@@ -126,7 +126,7 @@ function validate_punishments(
 end
 
 function observe_total_money!(game::G, players::Dict) where {G <: AbstractPublicGoodsGame}
-    for (_,player) ∈ players 
+    for (_, player) ∈ players
         observe_total_money!(G, player, deepcopy(game.total_money))
     end
     return nothing
